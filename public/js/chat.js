@@ -94,6 +94,45 @@ $pushToTalkButton.addEventListener('mousedown', (e) => {
 
     console.log('Talking...')
 
+    audioStream()
+
+})
+
+
+
+$pushToTalkButton.addEventListener('touchstart', (e) => {
+    e.preventDefault()
+
+    talking = true
+
+    console.log('Talking...')
+
+    audioStream()    
+
+})
+
+$pushToTalkButton.addEventListener('mouseup', (e) => {
+    e.preventDefault()
+
+    talking = false
+
+    console.log('Stopped!')
+})
+
+$pushToTalkButton.addEventListener('touchend', (e) => {
+    e.preventDefault()
+
+    talking = false
+
+    console.log('Stopped!')
+})
+
+socket.on("send", function (data) {
+    var audio = new Audio(data);
+    audio.play();
+});
+
+function audioStream() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
 
         var madiaRecorder = new MediaRecorder(stream);
@@ -133,18 +172,4 @@ $pushToTalkButton.addEventListener('mousedown', (e) => {
           madiaRecorder.stop();
         }, 1000);
     });
-
-})
-
-$pushToTalkButton.addEventListener('mouseup', (e) => {
-    e.preventDefault()
-
-    talking = false
-
-    console.log('Stopped!')
-})
-
-socket.on("send", function (data) {
-    var audio = new Audio(data);
-    audio.play();
-});
+}
